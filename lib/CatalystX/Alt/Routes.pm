@@ -1,53 +1,155 @@
 package CatalystX::Alt::Routes;
 
-# ABSTRACT: The great new CatalystX::Alt::Routes!
+# ABSTRACT: A DSL for declaring controller paths
 
-use Moose;
-use namespace::autoclean;
-use common::sense;
+use strict;
+use warnings;
 
+use Hash::MultiValue;
+use Moose::Exporter;
 
-__PACKAGE__->meta->make_immutable;
+Moose::Exporter->setup_import_methods(
+    with_meta => [
+        qw( private global public ),
+        (map { "${_}_action" } qw{ default index begin end auto }),
+    ],
+    as_is => [
+        qw(
+            before_action after_action template tweak_stash
+            chained args capture_args path_name path_part action_class
+        ),
+        (map { "menu_$_" } qw{ label parent args cond order roles title }),
+    ],
+);
 
-1;
+# start-points
+sub public  { _add_path([ Path    => $_[1] ], @_) }
+sub private { _add_path([ Private => 1     ], @_) }
+sub global  { _add_path([ Global  => 1     ], @_) }
+
+# special actions
+sub default_action(&) { _add_path([ path_name(q{})             ], shift, 'default', @_) }
+sub index_action(&)   { _add_path([ path_name(q{}), args(0)    ], shift, 'index',   @_) }
+sub begin_action(&)   { _add_path([                            ], shift, 'begin',   @_) }
+sub end_action(&)     { _add_path([ action_class('RenderView') ], shift, 'end',     @_) }
+sub auto_action(&)    { _add_path([                            ], shift, 'auto',    @_) }
+
+# experimental - beore/after wrappers for our action method
+sub before_action(&) { ( _before => $_[0] ) }
+sub after_action(&)  { ( _after  => $_[0] ) }
+
+#sub template($)    { my $t = shift; (_before => sub    { $_[1]->stash-> { template} = $t }) }
+sub tweak_stash($$) { my ($k, $v) = @_; (_before => sub { $_[1]->stash-> { $k} = $v })       }
+sub template($)     { tweak_stash(template => $_[0])                                         }
+
+# standard atts
+sub chained($)      { _att(Chained     => @_) }
+sub args($)         { _att(Args        => @_) }
+sub capture_args($) { _att(CaptureArgs => @_) }
+sub path_part($)    { _att(PathPart    => @_) }
+sub path_name($)    { _att(Path        => @_) }
+sub action_class($) { _att(ActionClass => @_) }
+
+# Catalyst::Plugin::Navigation specific bits
+sub menu_label($)  { _att(Menu       => @_) }
+sub menu_parent($) { _att(MenuParent => @_) }
+sub menu_args($)   { _att(MenuArgs   => @_) }
+sub menu_cond($)   { _att(MenuCond   => @_) }
+sub menu_order($)  { _att(MenuOrder  => @_) }
+sub menu_roles($)  { _att(MenuRoles  => @_) }
+sub menu_title($)  { _att(MenuTitle  => @_) }
+
+sub _att { ( shift(@_) => [ @_ ] ) }
+
+sub _add_path {
+    my ($path, $meta, $name, @args) = @_;
+    my $sub = pop @args;
+
+    # XXX squash them down before adding to config
+    #my $action_attributes = { @$path, @args };
+    my $action_attributes = Hash::MultiValue->new(@$path, @args);
+
+    my @before = $action_attributes->get_all('_before');
+    delete $action_attributes->{'_before'};
+    my @after = $action_attributes->get_all('_after');
+    delete $action_attributes->{'_after'};
+
+    # so there's two ways (I know of) to proceed here...  The first (and the
+    # one we use) is to poke at our class' config() and establish our actions
+    # here.  The second would be to fiddle with the method's metaclass to add
+    # attributes to it.  Both allow the standard action discovery to work, but
+    # the config method seems a little less magical, so that's what we're
+    # using right now.
+    #
+    # ...and by "less magical" I mean "without the additional metaclass
+    # tinkering that would be necessary".
+
+    $meta->name->config->{actions}->{$name} = $action_attributes;
+
+    # handle either a method name or a coderef to be installed
+    # XXX broken
+    $meta->add_method($name => sub { goto &$sub })
+        if (ref $sub || 'nope') eq 'CODE';
+
+    $meta->add_before_method_modifier($name => $_)
+        for @before;
+    $meta->add_after_method_modifier($name => $_)
+        for @after;
+
+    return;
+}
+
+!!42;
 
 __END__
 
 =head1 SYNOPSIS
 
-In C<dist.ini>:
+    package MyApp::Controller::Foo;
 
-    [NoSmartCommentsTests]
+    use Moose;
+    use namespace::autoclean;
+    use CatalystX::Alt::Routes;
+
+    # aka: sub index : Path(q{}) Args(0) { ... }
+    index { ... do something indexy here ... };
+
+    # ... 
+    public list
+        => args 1
+        => template 'other_list.tt2'
+        => sub {
+            my ($self, $c) = @_;
+
+            ... something listy here ...
+    };
+
+
+    private something
+
 
 =head1 DESCRIPTION
 
-This is an extension of L<Dist::Zilla::Plugin::InlineFiles>, providing the
-following file:
-
-    xt/release/no-smart-comments.t - test to ensure no Smart::Comments
-
-=head1 NOTE
-
-The name of this plugin has turned out to be somewhat misleading, I'm afraid:
-we don't actually test for the _existance_ of smart comments, rather we
-ensure that Smart::Comment is not used by any file checked.
+This package exports sugar that allows paths to be declared
+without having to hew to any of the requirements of attributes. Note that this
+is an _alternate_ way to declare paths; you can still use the standard approach
+without fear or reprisal.
 
 =head1 SEE ALSO
 
-L<Smart::Comments>, L<Test::NoSmartComments>
+This package is largely inspired by (and steals parts of) L<CatalystX::Routes>.
 
 =head1 BUGS
 
 All complex software has bugs lurking in it, and this module is no exception.
 
 Please report any bugs to
-"bug-CatalystX::Alt::Routes@rt.cpan.org",
+"bug-CatalystX-Alt-Routes@rt.cpan.org",
 or through the web interface at <http://rt.cpan.org>.
 
 Patches and pull requests through GitHub are most welcome; our page and repo
 (same URI):
 
-    https://github.com/RsrchBoy/CatalystX::Alt::Routes
+    https://github.com/RsrchBoy/catalystx-alt-routes
 
 =cut
-
