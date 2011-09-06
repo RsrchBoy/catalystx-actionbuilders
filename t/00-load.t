@@ -2,6 +2,6 @@
 
 use Test::More tests => 1;
 
-BEGIN { use_ok '' }
+BEGIN { use_ok 'CatalystX::Alt::Routes' }
 
-diag("Testing CatalystX-Alt-Routes $Dist::Zilla::Plugin::lib/CatalystX/Alt/Routes.pm::VERSION, Perl $], $^X");
+diag("Testing CatalystX::Alt::Routes $CatalystX::Alt::Routes::VERSION, Perl $], $^X");
