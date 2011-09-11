@@ -111,10 +111,11 @@ __END__
     use namespace::autoclean;
     use CatalystX::Alt::Routes;
 
-    # aka: sub index : Path(q{}) Args(0) { ... }
-    index { ... do something indexy here ... };
+    extends 'Catalyst::Controller';
 
-    # ... 
+    # aka: sub index : Path(q{}) Args(0) { ... }
+    index_action { ... do something indexy here ... };
+
     public list
         => args 1
         => template 'other_list.tt2'
@@ -134,6 +135,53 @@ This package exports sugar that allows paths to be declared
 without having to hew to any of the requirements of attributes. Note that this
 is an _alternate_ way to declare paths; you can still use the standard approach
 without fear or reprisal.
+
+We provide common shortcuts to common "special" actions (index, default, etc)
+as well as some helpers for commonly-used packages.
+
+=head1 SPECIAL ACTIONS
+
+These all take one argument, a coderef; e.g.
+
+    index_action { ... do something indexy ... };
+
+=head2 index_action
+
+=head2 default_action
+
+=head2 begin_action
+
+=head2 end_action
+
+=head2 auto_action
+
+=head1 ACTIONS
+
+=head2 public
+
+=head2 private
+
+=head2 global
+
+=head1 ACTION PARAMETERS
+
+Probably not the best name for this.
+
+
+=head1 NAVIGATION/MENU PARAMETERS
+
+We also include support for defining menu attributes that can be used by
+L<Catalyst::Plugin::Navigation>.
+
+=head1 BEGIN BLOCKS
+
+It's good practice to wrap any "extends" in your controller classes --
+essential if you're using the standard approach of method attributes to define
+your routes.
+
+If you're using this package exclusively to define actions, you do not need to
+use a BEGIN block.  Note I'm not recommending this, just stating that it's
+possible -- and if something breaks, you get to keep all the pieces :)
 
 =head1 SEE ALSO
 
