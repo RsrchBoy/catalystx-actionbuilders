@@ -10,13 +10,14 @@ use Moose::Exporter;
 
 Moose::Exporter->setup_import_methods(
     with_meta => [
-        qw( private global public ),
+        qw( private global public path ),
         (map { "${_}_action" } qw{ default index begin end auto }),
     ],
     as_is => [
         qw(
             before_action after_action template tweak_stash
             chained args capture_args path_name path_part action_class
+            index_parts
         ),
         (map { "menu_$_" } qw{ label parent args cond order roles title }),
     ],
@@ -26,13 +27,17 @@ Moose::Exporter->setup_import_methods(
 sub public  { _add_path([ Path    => $_[1] ], @_) }
 sub private { _add_path([ Private => 1     ], @_) }
 sub global  { _add_path([ Global  => 1     ], @_) }
+sub path    { _add_path([                  ], @_) }
+
+sub index_parts() { (path_name(q{}), args(0)) }
 
 # special actions
 sub default_action(&) { _add_path([ path_name(q{})             ], shift, 'default', @_) }
-sub index_action(&)   { _add_path([ path_name(q{}), args(0)    ], shift, 'index',   @_) }
+sub index_action(&)   { _add_path([ index_parts                ], shift, 'index',   @_) }
 sub begin_action(&)   { _add_path([                            ], shift, 'begin',   @_) }
 sub end_action(&)     { _add_path([ action_class('RenderView') ], shift, 'end',     @_) }
 sub auto_action(&)    { _add_path([                            ], shift, 'auto',    @_) }
+
 
 # experimental - beore/after wrappers for our action method
 sub before_action(&) { ( _before => $_[0] ) }
