@@ -17,7 +17,7 @@ Moose::Exporter->setup_import_methods(
         qw(
             before_action after_action template tweak_stash
             chained args capture_args path_name path_part action_class
-            index_parts
+            index_parts action
         ),
         (map { "menu_$_" } qw{ label parent args cond order roles title }),
     ],
@@ -30,6 +30,7 @@ sub global  { _add_path([ Global  => 1     ], @_) }
 sub path    { _add_path([                  ], @_) }
 
 sub index_parts() { (path_name(q{}), args(0)) }
+sub action(&)     { return shift              }
 
 # special actions
 sub default_action(&) { _add_path([ path_name(q{})             ], shift, 'default', @_) }
