@@ -67,9 +67,17 @@ sub menu_title($)  { _att(MenuTitle  => @_) }
 
 sub _att { ( shift(@_) => [ @_ ] ) }
 
+my %counter = ();
+
 sub _add_path {
     my ($path, $meta, $name, @args) = @_;
     my $sub = pop @args;
+
+    # default
+    do { push @args, $sub; $sub = sub {} }
+        unless $sub && ref $sub eq 'CODE';
+
+    $counter{$meta->name} ||= 0;
 
     # XXX squash them down before adding to config
     #my $action_attributes = { @$path, @args };
@@ -79,6 +87,13 @@ sub _add_path {
     delete $action_attributes->{'_before'};
     my @after = $action_attributes->get_all('_after');
     delete $action_attributes->{'_after'};
+
+    # some menu defaults
+    if (exists $action_attributes->{Menu}) {
+
+        $action_attributes->{MenuOrder} = $counter{$meta->name} += 10
+            unless exists $action_attributes->{MenuOrder};
+    }
 
     # so there's two ways (I know of) to proceed here...  The first (and the
     # one we use) is to poke at our class' config() and establish our actions
