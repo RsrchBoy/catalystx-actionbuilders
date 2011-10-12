@@ -65,6 +65,12 @@ sub menu_order($)  { _att(MenuOrder  => @_) }
 sub menu_roles($)  { _att(MenuRoles  => @_) }
 sub menu_title($)  { _att(MenuTitle  => @_) }
 
+# Catalyst::Plugin::ActionRole
+sub does($) { _att(Does => @_) }
+
+# CatalystX::SimpleLogin
+sub needs_login() { does 'NeedsLogin' }
+
 sub _att { ( shift(@_) => [ @_ ] ) }
 
 my %counter = ();
