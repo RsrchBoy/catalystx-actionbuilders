@@ -6,39 +6,69 @@ use strict;
 use warnings;
 
 use Hash::MultiValue;
-use Moose::Exporter;
 
-Moose::Exporter->setup_import_methods(
-    with_meta => [
-        qw( private global public path ),
-        (map { "${_}_action" } qw{ default index begin end auto }),
-    ],
-    as_is => [
+use Sub::Exporter -setup => {
+
+    # figure out where we're being imported, so we can call meta() on it
+    collectors => { INIT => sub { $_[0]->{into} = $_[1]->{into}; 1 } },
+
+    exports => [
+
         qw(
-            before_action after_action template tweak_stash
             chained args capture_args path_name path_part action_class
-            index_parts action
+            index_parts
+            action
+
+            does
+
+            needs_login
         ),
         (map { "menu_$_" } qw{ label parent args cond order roles title }),
-    ],
-);
 
-# start-points
-sub public  { _add_path([ Path    => $_[1] ], @_) }
-sub private { _add_path([ Private => 1     ], @_) }
-sub global  { _add_path([ Global  => 1     ], @_) }
-sub path    { _add_path([                  ], @_) }
+        public  => sub { _build_public(@_) },
+        private => sub { _builder([ Private => 1 ], @_) },
+        global  => sub { _builder([ Global  => 1 ], @_) },
+        path    => sub { _builder([              ], @_) },
+
+        default_action => sub { _action([ path_name(q{})             ], @_) },
+        index_action   => sub { _action([ index_parts()              ], @_) },
+        begin_action   => sub { _action([                            ], @_) },
+        end_action     => sub { _action([ action_class('RenderView') ], @_) },
+        auto_action    => sub { _action([                            ], @_) },
+    ],
+
+    groups => {
+
+        default => [ qw{
+            :basic
+            :actions
+        } ],
+
+        basic => [ qw{
+            public private global path
+            chained args capture_args path_name path_part action_class
+            index_parts
+            action
+        } ],
+
+        actions => sub { _build_actions(@_) },
+
+        experimental => [ qw{
+            before_action after_action template tweak_stash
+        } ],
+
+        navigation => [
+            ':default',
+            (map { "menu_$_" } qw{ label parent args cond order roles title }),
+        ],
+
+        action_role  => [ qw{ does }        ],
+        simple_login => [ qw{ needs_login } ],
+    },
+};
 
 sub index_parts() { (path_name(q{}), args(0)) }
 sub action(&)     { return shift              }
-
-# special actions
-sub default_action(&) { _add_path([ path_name(q{})             ], shift, 'default', @_) }
-sub index_action(&)   { _add_path([ index_parts                ], shift, 'index',   @_) }
-sub begin_action(&)   { _add_path([                            ], shift, 'begin',   @_) }
-sub end_action(&)     { _add_path([ action_class('RenderView') ], shift, 'end',     @_) }
-sub auto_action(&)    { _add_path([                            ], shift, 'auto',    @_) }
-
 
 # experimental - beore/after wrappers for our action method
 sub before_action(&) { ( _before => $_[0] ) }
@@ -73,6 +103,7 @@ sub needs_login() { does 'NeedsLogin' }
 
 sub _att { ( shift(@_) => [ @_ ] ) }
 
+# XXX
 my %counter = ();
 
 sub _add_path {
@@ -118,12 +149,75 @@ sub _add_path {
     $meta->add_method($name => sub { goto &$sub })
         if (ref $sub || 'nope') eq 'CODE';
 
-    $meta->add_before_method_modifier($name => $_)
-        for @before;
-    $meta->add_after_method_modifier($name => $_)
-        for @after;
+    $meta->add_before_method_modifier($name => $_) for @before;
+    $meta->add_after_method_modifier($name => $_) for @after;
 
     return;
+}
+
+# Catalyst::Controller::REST
+#sub rest { _att(ActionClass => 'REST') }
+#sub rest() { action_class 'REST' }
+#sub public_rest { public(_att(ActionClass => 'REST'), @_) }
+
+#sub rest(&)   { (action_class 'REST', action_method => shift) }
+#sub http_get(&)    { ... }
+#sub http_put(&)    { ... }
+#sub http_post(&)   { ... }
+#sub http_delete(&) { ... }
+
+sub _builder {
+    my ($pathref, $class, $name, $arg, $col) = @_;
+
+    my $into = $col->{INIT}->{into};
+    return sub { _add_path($pathref, $into->meta, @_) };
+}
+
+sub _build_public {
+    my ($class, $name, $arg, $col) = @_;
+
+    my $into = $col->{INIT}->{into};
+    return sub { _add_path([ Path => $_[0]], $into->meta, @_) };
+}
+
+sub _action {
+    my ($pathref, $class, $name, $arg, $col) = @_;
+
+    my %opts = (
+        default => [ path_name(q{})             ],
+        index   => [ index_parts                ],
+        begin   => [                            ],
+        end     => [ action_class('RenderView') ],
+        auto    => [                            ],
+    );
+
+    my $into = $col->{INIT}->{into};
+    $name =~ s/_action$//;
+
+    return sub(&) { _add_path($pathref, $into->meta, $name, @_) };
+}
+
+sub _build_actions {
+    my ($class, $group, $arg, $col) = @_;
+
+    my %opts = (
+        default => [ path_name(q{})             ],
+        index   => [ index_parts                ],
+        begin   => [                            ],
+        end     => [ action_class('RenderView') ],
+        auto    => [                            ],
+    );
+
+    my $into = $col->{INIT}->{into};
+
+    my %subs;
+    for my $name (keys %opts) {
+
+        $subs{$name.'_action'} =
+            sub(&) { _add_path($opts{$name}, $into->meta, $name, @_) };
+    }
+
+    return { %subs };
 }
 
 !!42;
