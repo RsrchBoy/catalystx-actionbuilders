@@ -308,17 +308,4 @@ possible -- and if something breaks, you get to keep all the pieces :)
 
 This package is largely inspired by (and steals parts of) L<CatalystX::Routes>.
 
-=head1 BUGS
-
-All complex software has bugs lurking in it, and this module is no exception.
-
-Please report any bugs to
-"bug-CatalystX-Alt-Routes@rt.cpan.org",
-or through the web interface at <http://rt.cpan.org>.
-
-Patches and pull requests through GitHub are most welcome; our page and repo
-(same URI):
-
-    https://github.com/RsrchBoy/catalystx-alt-routes
-
 =cut
