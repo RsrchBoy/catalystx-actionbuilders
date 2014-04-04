@@ -1,4 +1,4 @@
-package CatalystX::Alt::Routes;
+package Catalyst::Actions;
 
 # ABSTRACT: A DSL for declaring controller paths
 
@@ -230,7 +230,7 @@ __END__
 
     use Moose;
     use namespace::autoclean;
-    use CatalystX::Alt::Routes;
+    use Catalyst::Actions;
 
     extends 'Catalyst::Controller';
 
