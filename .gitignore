@@ -15,5 +15,5 @@ META.yml
 *.bak
 MYMETA.*
 .build
-CatalystX-Alt-Routes-*
+CatalystX-ActionBuilders-*
 releases/
