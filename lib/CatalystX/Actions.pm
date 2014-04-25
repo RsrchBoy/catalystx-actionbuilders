@@ -1,4 +1,4 @@
-package Catalyst::Actions;
+package CatalystX::Actions;
 
 # ABSTRACT: A DSL for declaring controller paths
 
@@ -230,7 +230,7 @@ __END__
 
     use Moose;
     use namespace::autoclean;
-    use Catalyst::Actions;
+    use CatalystX::Actions;
 
     extends 'Catalyst::Controller';
 
@@ -259,6 +259,12 @@ without fear or reprisal.
 
 We provide common shortcuts to common "special" actions (index, default, etc)
 as well as some helpers for commonly-used packages.
+
+=head1 BEWARE!
+
+This is a pretty early version, and needs a goodly number of tests.  YMMV,
+pull-requests welcome.  Some stuff may disappear, some stuff may appear, etc,
+etc.
 
 =head1 SPECIAL ACTIONS
 
