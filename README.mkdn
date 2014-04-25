@@ -1,10 +1,10 @@
 # NAME
 
-CatalystX::Actions - A DSL for declaring controller paths
+CatalystX::ActionBuilders - A DSL for declaring controller paths
 
 # VERSION
 
-This document describes version 0.003 of CatalystX::Actions - released April 25, 2014 as part of CatalystX-Actions.
+This document describes version 0.003 of CatalystX::ActionBuilders - released April 25, 2014 as part of CatalystX-ActionBuilders.
 
 # SYNOPSIS
 
@@ -12,7 +12,7 @@ This document describes version 0.003 of CatalystX::Actions - released April 25,
 
     use Moose;
     use namespace::autoclean;
-    use CatalystX::Actions;
+    use CatalystX::ActionBuilders;
 
     extends 'Catalyst::Controller';
 
@@ -43,9 +43,9 @@ as well as some helpers for commonly-used packages.
 
 # BEWARE!
 
-This is a pretty early version, and needs a goodly number of tests.  YMMV,
-pull-requests welcome.  Some stuff may disappear, some stuff may appear, etc,
-etc.
+This is a pretty early version based off of 2-ish year old code, and needs a
+goodly number of (any!) tests.  YMMV, pull-requests welcome.  Some stuff may
+disappear, some stuff may appear, etc, etc.
 
 # SPECIAL ACTIONS
 

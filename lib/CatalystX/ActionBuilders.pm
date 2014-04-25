@@ -1,4 +1,4 @@
-package CatalystX::Actions;
+package CatalystX::ActionBuilders;
 
 # ABSTRACT: A DSL for declaring controller paths
 
@@ -230,7 +230,7 @@ __END__
 
     use Moose;
     use namespace::autoclean;
-    use CatalystX::Actions;
+    use CatalystX::ActionBuilders;
 
     extends 'Catalyst::Controller';
 
@@ -262,9 +262,9 @@ as well as some helpers for commonly-used packages.
 
 =head1 BEWARE!
 
-This is a pretty early version, and needs a goodly number of tests.  YMMV,
-pull-requests welcome.  Some stuff may disappear, some stuff may appear, etc,
-etc.
+This is a pretty early version based off of 2-ish year old code, and needs a
+goodly number of (any!) tests.  YMMV, pull-requests welcome.  Some stuff may
+disappear, some stuff may appear, etc, etc.
 
 =head1 SPECIAL ACTIONS
 
