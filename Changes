@@ -1,7 +1,5 @@
 Revision history for CatalystX-ActionBuilders
 
-{{$NEXT}}
-
 0.003     2014-04-25 14:35:22 PDT-0700
 	* rename to CatalystX::ActionBuilders
 	* initial indexed release, though it still needs LOTS OF WORK

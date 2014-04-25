@@ -1,4 +1,18 @@
+#
+# This file is part of CatalystX-ActionBuilders
+#
+# This software is Copyright (c) 2011 by Chris Weyl.
+#
+# This is free software, licensed under:
+#
+#   The GNU Lesser General Public License, Version 2.1, February 1999
+#
 package CatalystX::ActionBuilders;
+BEGIN {
+  $CatalystX::ActionBuilders::AUTHORITY = 'cpan:RSRCHBOY';
+}
+# git description: 0.002-11-g0828670
+$CatalystX::ActionBuilders::VERSION = '0.003';
 
 # ABSTRACT: A DSL for declaring controller paths
 
@@ -224,6 +238,20 @@ sub _build_actions {
 
 __END__
 
+=pod
+
+=encoding UTF-8
+
+=for :stopwords Chris Weyl
+
+=head1 NAME
+
+CatalystX::ActionBuilders - A DSL for declaring controller paths
+
+=head1 VERSION
+
+This document describes version 0.003 of CatalystX::ActionBuilders - released April 25, 2014 as part of CatalystX-ActionBuilders.
+
 =head1 SYNOPSIS
 
     package MyApp::Controller::Foo;
@@ -248,7 +276,6 @@ __END__
 
 
     private something
-
 
 =head1 DESCRIPTION
 
@@ -294,7 +321,6 @@ These all take one argument, a coderef; e.g.
 
 Probably not the best name for this.
 
-
 =head1 NAVIGATION/MENU PARAMETERS
 
 We also include support for defining menu attributes that can be used by
@@ -312,6 +338,40 @@ possible -- and if something breaks, you get to keep all the pieces :)
 
 =head1 SEE ALSO
 
-This package is largely inspired by (and steals parts of) L<CatalystX::Routes>.
+Please see those modules/websites for more information related to this module.
+
+=over 4
+
+=item *
+
+L<This package is largely inspired by (and steals parts of) L<CatalystX::Routes>.|This package is largely inspired by (and steals parts of) L<CatalystX::Routes>.>
+
+=back
+
+=head1 SOURCE
+
+The development version is on github at L<http://https://github.com/RsrchBoy/catalystx-actionbuilders>
+and may be cloned from L<git://https://github.com/RsrchBoy/catalystx-actionbuilders.git>
+
+=head1 BUGS
+
+Please report any bugs or feature requests on the bugtracker website
+https://github.com/RsrchBoy/catalystx-actionbuilders/issues
+
+When submitting a bug or request, please include a test-file or a
+patch to an existing test-file that illustrates the bug or desired
+feature.
+
+=head1 AUTHOR
+
+Chris Weyl <cweyl@alumni.drew.edu>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2011 by Chris Weyl.
+
+This is free software, licensed under:
+
+  The GNU Lesser General Public License, Version 2.1, February 1999
 
 =cut
