@@ -70,7 +70,7 @@ use Sub::Exporter -setup => {
 sub index_parts() { (path_name(q{}), args(0)) }
 sub action(&)     { return shift              }
 
-# experimental - beore/after wrappers for our action method
+# experimental - before/after wrappers for our action method
 sub before_action(&) { ( _before => $_[0] ) }
 sub after_action(&)  { ( _after  => $_[0] ) }
 
@@ -310,8 +310,12 @@ If you're using this package exclusively to define actions, you do not need to
 use a BEGIN block.  Note I'm not recommending this, just stating that it's
 possible -- and if something breaks, you get to keep all the pieces :)
 
-=head1 SEE ALSO
+=head1 PRIOR ART
 
 This package is largely inspired by (and steals parts of) L<CatalystX::Routes>.
+
+=head1 SEE ALSO
+
+CatalystX::Routes.
 
 =cut
