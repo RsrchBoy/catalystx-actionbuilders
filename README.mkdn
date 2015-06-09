@@ -1,6 +1,6 @@
-[![Build Status](https://travis-ci.org/RsrchBoy/catalystx-alt-routes.svg?branch=master)](https://travis-ci.org/RsrchBoy/catalystx-alt-routes)
+[![Build Status](https://travis-ci.org/RsrchBoy/catalystx-actionbuilders.svg?branch=master)](https://travis-ci.org/RsrchBoy/catalystx-actionbuilders)
 [![Kwalitee status](http://cpants.cpanauthors.org/dist/CatalystX-ActionBuilders.png)](http://cpants.charsbar.org/dist/overview/CatalystX-ActionBuilders)
-[![Coverage Status](https://coveralls.io/repos/RsrchBoy/catalystx-alt-routes/badge.png?branch=master)](https://coveralls.io/r/RsrchBoy/catalystx-alt-routes?branch=master)
+[![Coverage Status](https://coveralls.io/repos/RsrchBoy/catalystx-actionbuilders/badge.png?branch=master)](https://coveralls.io/r/RsrchBoy/catalystx-actionbuilders?branch=master)
 
 # NAME
 
@@ -8,7 +8,7 @@ CatalystX::ActionBuilders - A DSL for declaring controller paths
 
 # VERSION
 
-This document describes version 0.004 of CatalystX::ActionBuilders - released June 08, 2015 as part of CatalystX-ActionBuilders.
+This document describes version 0.004 of CatalystX::ActionBuilders - released June 09, 2015 as part of CatalystX-ActionBuilders.
 
 # SYNOPSIS
 
@@ -94,16 +94,20 @@ If you're using this package exclusively to define actions, you do not need to
 use a BEGIN block.  Note I'm not recommending this, just stating that it's
 possible -- and if something breaks, you get to keep all the pieces :)
 
+# PRIOR ART
+
+This package is largely inspired by (and steals parts of) [CatalystX::Routes](https://metacpan.org/pod/CatalystX::Routes).
+
 # SEE ALSO
 
 Please see those modules/websites for more information related to this module.
 
-- [This package is largely inspired by (and steals parts of) [CatalystX::Routes](https://metacpan.org/pod/CatalystX::Routes).](https://metacpan.org/pod/This&#x20;package&#x20;is&#x20;largely&#x20;inspired&#x20;by&#x20;\(and&#x20;steals&#x20;parts&#x20;of\)&#x20;CatalystX::Routes.)
+- [CatalystX::Routes.](https://metacpan.org/pod/CatalystX::Routes.)
 
 # BUGS
 
 Please report any bugs or feature requests on the bugtracker website
-https://github.com/RsrchBoy/catalystx-alt-routes/issues
+https://github.com/RsrchBoy/catalystx-actionbuilders/issues
 
 When submitting a bug or request, please include a test-file or a
 patch to an existing test-file that illustrates the bug or desired
@@ -118,7 +122,7 @@ Chris Weyl <cweyl@alumni.drew.edu>
 <div>
     <a href="https://gratipay.com/RsrchBoy/"><img src="http://img.shields.io/gratipay/RsrchBoy.svg" /></a>
     <a href="http://bit.ly/rsrchboys-wishlist"><img src="http://wps.io/wp-content/uploads/2014/05/amazon_wishlist.resized.png" /></a>
-    <a href="https://flattr.com/submit/auto?user_id=RsrchBoy&url=https%3A%2F%2Fgithub.com%2FRsrchBoy%2Fcatalystx-alt-routes&title=RsrchBoy's%20CPAN%20CatalystX-ActionBuilders&tags=%22RsrchBoy's%20CatalystX-ActionBuilders%20in%20the%20CPAN%22"><img src="http://api.flattr.com/button/flattr-badge-large.png" /></a>
+    <a href="https://flattr.com/submit/auto?user_id=RsrchBoy&url=https%3A%2F%2Fgithub.com%2FRsrchBoy%2Fcatalystx-actionbuilders&title=RsrchBoy's%20CPAN%20CatalystX-ActionBuilders&tags=%22RsrchBoy's%20CatalystX-ActionBuilders%20in%20the%20CPAN%22"><img src="http://api.flattr.com/button/flattr-badge-large.png" /></a>
 </div>
 
 Please note **I do not expect to be gittip'ed or flattr'ed for this work**,
@@ -126,7 +130,7 @@ rather **it is simply a very pleasant surprise**. I largely create and release
 works like this because I need them or I find it enjoyable; however, don't let
 that stop you if you feel like it ;)
 
-[Flattr](https://flattr.com/submit/auto?user_id=RsrchBoy&url=https%3A%2F%2Fgithub.com%2FRsrchBoy%2Fcatalystx-alt-routes&title=RsrchBoy&#x27;s%20CPAN%20CatalystX-ActionBuilders&tags=%22RsrchBoy&#x27;s%20CatalystX-ActionBuilders%20in%20the%20CPAN%22),
+[Flattr](https://flattr.com/submit/auto?user_id=RsrchBoy&url=https%3A%2F%2Fgithub.com%2FRsrchBoy%2Fcatalystx-actionbuilders&title=RsrchBoy&#x27;s%20CPAN%20CatalystX-ActionBuilders&tags=%22RsrchBoy&#x27;s%20CatalystX-ActionBuilders%20in%20the%20CPAN%22),
 [Gratipay](https://gratipay.com/RsrchBoy/), or indulge my
 [Amazon Wishlist](http://bit.ly/rsrchboys-wishlist)...  If and \*only\* if you so desire.
 
